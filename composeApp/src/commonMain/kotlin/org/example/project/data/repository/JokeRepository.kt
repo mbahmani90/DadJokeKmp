@@ -15,9 +15,7 @@ sealed class JokeResource<T>(val data: T? = null , val message: String? = null){
 }
 
 interface JokeRepository {
-
     suspend fun fetchJokes(typeList: List<String> = mutableListOf()): JokeResource<List<Joke>>
-
 }
 
 class JokeRepositoryImp(
@@ -26,27 +24,28 @@ class JokeRepositoryImp(
 
     override suspend fun fetchJokes(typeList: List<String>): JokeResource<List<Joke>> {
         return try {
-            var result: JokeDto
-
-            result = jokeClientApi.getJokes(typeList)
-            while (result.type !in typeList){
-                delay(1000)
-                result = jokeClientApi.getJokes(typeList)
+            if (typeList.isEmpty()) {
+                return JokeResource.Error(message = "typeList must not be empty")
             }
 
-            JokeResource.Success(
-                listOf(
-                    Joke(
-                        id = result.id,
-                        type = result.type,
-                        setup = result.setup,
-                        punchline = result.punchline
+            val result = jokeClientApi.getJokes(typeList)
+            if (result.type in typeList) {
+                return JokeResource.Success(
+                    listOf(
+                        Joke(
+                            id = result.id,
+                            type = result.type,
+                            setup = result.setup,
+                            punchline = result.punchline
+                        )
                     )
                 )
-            )
+            }
+
+            JokeResource.Error(message = "No matching joke found")
 
         } catch (e: Exception) {
-            JokeResource.Error(data = null, message = e.message.toString())
+            JokeResource.Error(message = e.message)
         }
     }
 

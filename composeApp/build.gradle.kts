@@ -62,13 +62,25 @@ kotlin {
 
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.accompanist.swiperefresh)
-            implementation("app.cash.sqldelight:coroutines-extensions:2.2.1")
+            implementation(libs.coroutines.extensions)
             implementation(libs.androidx.navigation.compose)
-
+            implementation(libs.ktor.client.mock)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.kotlinx.coroutines.test)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.turbine)
         }
+
+        val androidUnitTest by getting {
+            dependencies {
+                implementation(libs.sqldelight.jdbc)
+            }
+        }
+
     }
 }
 
