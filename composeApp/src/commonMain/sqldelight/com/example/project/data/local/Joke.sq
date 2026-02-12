@@ -1,0 +1,21 @@
+-- shared/src/commonMain/sqldelight/org/example/project/data/local/Joke.sq
+
+CREATE TABLE joke (
+    id INTEGER NOT NULL PRIMARY KEY,
+    type TEXT NOT NULL,
+    setup TEXT NOT NULL,
+    punchline TEXT NOT NULL
+);
+
+selectAll:
+SELECT * FROM joke;
+
+insertJoke:
+INSERT OR REPLACE INTO joke(id, type, setup, punchline)
+VALUES (?, ?, ?, ?);
+
+deleteJoke:
+DELETE FROM joke WHERE id = ?;
+
+deleteAllJokes:
+DELETE FROM joke;
