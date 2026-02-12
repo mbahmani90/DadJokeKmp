@@ -19,3 +19,8 @@ DELETE FROM joke WHERE id = ?;
 
 deleteAllJokes:
 DELETE FROM joke;
+
+searchJokes:
+SELECT * FROM joke
+WHERE setup LIKE ('%' || :keyword || '%')
+OR punchline LIKE ('%' || :keyword || '%');

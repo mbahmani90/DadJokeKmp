@@ -9,18 +9,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
-import org.example.project.data.local.JokeDatabase
 
 interface FavoriteJokeRepository {
 
     fun getAllJokes(): Flow<List<Joke>>
+
+    fun searchJokes(keyword: String): Flow<List<Joke>>
 
     suspend fun insertJokes(jokes: List<Joke>)
 
     suspend fun deleteJoke(id: Long)
 
     suspend fun deleteAllJokes()
-
 }
 
 class FavoriteJokeRepositoryImp(
@@ -31,6 +31,13 @@ class FavoriteJokeRepositoryImp(
     override fun getAllJokes(): Flow<List<Joke>> {
         return queries
             .selectAll()
+            .asFlow()
+            .mapToList(dispatcher)
+    }
+
+    override fun searchJokes(keyword: String): Flow<List<Joke>> {
+        return queries
+            .searchJokes(keyword = keyword)
             .asFlow()
             .mapToList(dispatcher)
     }
