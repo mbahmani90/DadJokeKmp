@@ -129,6 +129,11 @@ fun JokeRoute(){
                                         text = jokeList[index].setup,
                                         modifier = Modifier.padding(16.dp)
                                     )
+
+                                    Text(
+                                        text = jokeList[index].punchline,
+                                        modifier = Modifier.padding(16.dp)
+                                    )
                                     Row(
                                         modifier = Modifier
                                             .fillMaxWidth()

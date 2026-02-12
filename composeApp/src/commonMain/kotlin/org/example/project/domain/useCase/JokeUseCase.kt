@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.retry
 import org.example.project.data.repository.JokeRepository
 import org.example.project.data.repository.JokeResource
-import kotlin.String
 
 class JokeUseCase(
     private val jokeRepository: JokeRepository,
@@ -27,14 +26,14 @@ class JokeUseCase(
             throw RuntimeException(result.message ?: "Unknown Error")
         }
 
-        emit(result)
+        emit(JokeResource.Success(result.data))
     }
-        .retry(30) { e ->
-            delay(1000)
-            true
-        }
-        .catch { e ->
-            emit(JokeResource.Error(message = e.message))
-        }
-        .flowOn(dispatcher)
+    .retry(30) { e ->
+        delay(1000)
+        true
+    }
+    .catch { e ->
+        emit(JokeResource.Error(message = e.message))
+    }
+    .flowOn(dispatcher)
 }

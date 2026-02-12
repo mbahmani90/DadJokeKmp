@@ -13,9 +13,4 @@ class FakeJokeClientApi : JokeClientApi {
         index++
         return joke
     }
-
-    fun reset() {
-        index = 0
-        shouldThrowError = false
-    }
 }
