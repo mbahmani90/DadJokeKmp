@@ -13,6 +13,7 @@ interface JokeClientApi {
 class JokeClientApiImp(
     private val client: HttpClient
 ): JokeClientApi {
+
     override suspend fun getJokes(type: List<String>): JokeDto {
         return client.get("https://official-joke-api.appspot.com/jokes/random").body()
     }
