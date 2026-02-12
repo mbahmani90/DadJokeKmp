@@ -27,7 +27,7 @@ class FavoriteJokeRepositoryImp(
     private val queries: JokeQueries,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : FavoriteJokeRepository {
-    
+
     override fun getAllJokes(): Flow<List<Joke>> {
         return queries
             .selectAll()

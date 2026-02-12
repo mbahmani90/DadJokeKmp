@@ -25,9 +25,20 @@ class JokeViewModel(
     private var _jokeStateFlow = MutableStateFlow(JokeState())
     val jokeStateFlow : StateFlow<JokeState> = _jokeStateFlow.asStateFlow()
 
-    fun fetchJoke(){
+    fun fetchJoke(type: List<String>){
 
-        jokeUseCase()
+        if(jokeStateFlow.value.isLoading){
+            return
+        }
+
+        if(type.isEmpty()){
+            _jokeStateFlow.value = _jokeStateFlow.value.copy(
+                isLoading = false , isSuccess = false ,
+                errorMessage = "Please select a category!", jokeList = null)
+            return
+        }
+
+        jokeUseCase(type)
             .onEach { result ->
                 when(result){
                     is JokeResource.Error -> {
@@ -39,7 +50,7 @@ class JokeViewModel(
                     is JokeResource.Loading -> {
                         _jokeStateFlow.value = _jokeStateFlow.value.copy(
                             isLoading = true , isSuccess = false ,
-                            errorMessage = null, jokeList = null)
+                            errorMessage = null)
                     }
                     is JokeResource.Success -> {
                         _jokeStateFlow.value = _jokeStateFlow.value.copy(

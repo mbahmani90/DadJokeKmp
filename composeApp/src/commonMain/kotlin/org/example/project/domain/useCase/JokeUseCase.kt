@@ -9,18 +9,19 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import org.example.project.data.repository.JokeRepository
 import org.example.project.data.repository.JokeResource
+import kotlin.String
 
 class JokeUseCase(
     private val jokeRepository: JokeRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
-    operator fun invoke()
+    operator fun invoke(type: List<String>)
             : Flow<JokeResource<List<Joke>>> = flow {
 
         emit(JokeResource.Loading())
 
-        val result = jokeRepository.fetchJokes()
+        val result = jokeRepository.fetchJokes(type)
 
         when(result){
             is JokeResource.Error -> {
@@ -30,7 +31,6 @@ class JokeUseCase(
                 emit(JokeResource.Loading())
             }
             is JokeResource.Success -> {
-//                val data = result.data?.toModel()
                 emit(JokeResource.Success(result.data))
             }
         }

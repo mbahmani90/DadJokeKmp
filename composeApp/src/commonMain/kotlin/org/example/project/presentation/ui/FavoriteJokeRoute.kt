@@ -1,5 +1,7 @@
 package org.example.project.presentation.ui
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -37,7 +39,13 @@ fun FavoriteJokeRoute(){
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp),
+                        .padding(8.dp)
+                        .combinedClickable(
+                            onClick = { },
+                            onLongClick = {
+                                favoriteJokeViewModel.removeJoke(item.id)
+                            }
+                        ),
                     elevation = CardDefaults.cardElevation(4.dp)
                 ) {
                     Text(
