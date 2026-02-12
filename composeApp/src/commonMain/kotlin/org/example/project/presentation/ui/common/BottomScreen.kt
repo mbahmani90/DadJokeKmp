@@ -6,6 +6,6 @@ sealed class BottomScreen(
     val label: String,
     val icon: String
 ) {
-    object Joke : BottomScreen("joke", "Jokes", "😂")
+    object Joke : BottomScreen("joke", "Menu", "😂")
     object Favorite : BottomScreen("favorite", "Favorites", "❤️")
 }
