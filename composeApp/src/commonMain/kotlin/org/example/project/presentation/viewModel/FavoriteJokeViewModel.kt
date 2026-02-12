@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import com.example.project.data.local.Joke
+import kotlinx.coroutines.Job
 import org.example.project.data.repository.FavoriteJokeRepository
 
 data class FavoriteJokeState(
@@ -20,9 +21,8 @@ class FavoriteJokeViewModel(
     private val _state = MutableStateFlow(FavoriteJokeState())
     val state: StateFlow<FavoriteJokeState> = _state.asStateFlow()
 
-//    init {
-//        observeJokes()
-//    }
+    private var searchJob: Job? = null
+
 
     fun observeJokes() {
         viewModelScope.launch {
@@ -66,6 +66,24 @@ class FavoriteJokeViewModel(
             } catch (e: Exception) {
                 _state.update { it.copy(errorMessage = e.message) }
             }
+        }
+    }
+
+    fun searchJokes(query: String) {
+        searchJob?.cancel()
+        searchJob =viewModelScope.launch {
+            val flow = if (query.isBlank()) {
+                repository.getAllJokes()
+            } else {
+                repository.searchJokes(query)
+            }
+
+            flow.catch { e ->
+                _state.update { it.copy(errorMessage = e.message) }
+            }
+                .collect { filteredJokes ->
+                    _state.update { it.copy(jokes = filteredJokes, errorMessage = null) }
+                }
         }
     }
 }
