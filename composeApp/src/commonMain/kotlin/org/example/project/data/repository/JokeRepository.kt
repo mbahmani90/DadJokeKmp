@@ -3,6 +3,7 @@ package org.example.project.data.repository
 import com.example.project.data.local.Joke
 import kotlinx.coroutines.delay
 import org.example.project.data.local.JokeDatabase
+import org.example.project.data.mappers.toJoke
 import org.example.project.data.remote.JokeClientApi
 import org.example.project.data.remote.JokeDto
 
@@ -30,16 +31,7 @@ class JokeRepositoryImp(
 
             val result = jokeClientApi.getJokes(typeList)
             if (result.type in typeList) {
-                return JokeResource.Success(
-                    listOf(
-                        Joke(
-                            id = result.id,
-                            type = result.type,
-                            setup = result.setup,
-                            punchline = result.punchline
-                        )
-                    )
-                )
+                return JokeResource.Success(listOf(result.toJoke()))
             }
 
             JokeResource.Error(message = "No matching joke found")
