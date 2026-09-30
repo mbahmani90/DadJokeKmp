@@ -62,10 +62,10 @@ fun FavoriteJokeRoute() {
         LazyColumn {
 
             val filteredJokes = favoriteJokeState.jokes
-//                .filter {
-//                it.setup.contains(searchQuery, ignoreCase = true) ||
-//                        it.type.contains(searchQuery, ignoreCase = true)
-//            }
+                .filter {
+                it.setup.contains(searchQuery, ignoreCase = true) ||
+                        it.type.contains(searchQuery, ignoreCase = true)
+            }
 
             items(
                 count = filteredJokes.size,
